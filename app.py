@@ -1243,6 +1243,17 @@ def view_doc(doc_id):
     if not doc:
         flash("Document not found.", "warning")
         return redirect(url_for('support'))
+
+# ----------------------------------------------------
+# Error Handlers
+# ----------------------------------------------------
+
+@app.errorhandler(500)
+def internal_error(error):
+    # Log the error for debugging purposes
+    log_activity(f"Internal server error: {error}", "System", None)
+    # Render a user-friendly error page
+    return render_template('500.html'), 500
         
     return render_template('doc_viewer.html', doc=doc, doc_id=doc_id, page="support")
 
@@ -1254,4 +1265,8 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         seed_database()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Use the PORT environment variable provided by Render (default to 5000 for local development)
+    port = int(os.getenv('PORT', 5000))
+    # Disable debug mode in production; can be overridden by DEBUG env variable
+    debug_mode = os.getenv('DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
