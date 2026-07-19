@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Leave Management - BPA Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#191c1f",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#0f62fe",
+                    "on-surface": "#191c1f",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f2f4f8",
+                    "on-error-container": "#93000a",
+                    "secondary": "#585f66",
+                    "outline": "#737687",
+                    "tertiary-fixed-dim": "#b8c4ff",
+                    "on-surface-variant": "#424656",
+                    "on-primary-fixed-variant": "#003da9",
+                    "primary": "#004ccd",
+                    "on-secondary-fixed": "#151c22",
+                    "on-primary-container": "#f3f3ff",
+                    "tertiary": "#304db9",
+                    "surface-container-high": "#e6e8ec",
+                    "surface-container": "#eceef2",
+                    "primary-fixed": "#dbe1ff",
+                    "background": "#f7f9fd",
+                    "on-secondary-fixed-variant": "#41484e",
+                    "surface-bright": "#f7f9fd",
+                    "surface-container-highest": "#e0e2e6",
+                    "on-secondary-container": "#5e656c",
+                    "surface-dim": "#d8dade",
+                    "on-tertiary-container": "#f3f3ff",
+                    "surface-variant": "#e0e2e6",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "tertiary-container": "#4b67d3",
+                    "tertiary-fixed": "#dde1ff",
+                    "outline-variant": "#c3c6d8",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#0052dd",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#c0c7cf",
+                    "inverse-on-surface": "#eff1f5",
+                    "inverse-primary": "#b4c5ff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#00174c",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#1a3ca8",
+                    "secondary-container": "#dce3eb",
+                    "inverse-surface": "#2d3134",
+                    "surface": "#f7f9fd",
+                    "on-tertiary-fixed": "#001453",
+                    "secondary-fixed": "#dce3eb",
+                    "on-secondary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "xl": "32px",
+                    "margin-desktop": "32px",
+                    "base": "4px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "2xl": "48px",
+                    "sm": "8px",
+                    "gutter": "16px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "code-sm": ["JetBrains Mono"],
+                    "display-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "code-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Side Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col p-md z-50">
+<div class="mb-xl px-md">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">BPA Suite</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Invisible Optimizer</p>
+</div>
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl" href="/attendance">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Attendance</span>
+</a>
+<!-- Active State: Leave -->
+<a class="flex items-center gap-md bg-primary-container text-on-primary-container rounded-xl px-md py-sm transition-all opacity-90" href="/leave">
+<span class="material-symbols-outlined" data-icon="event_busy">event_busy</span>
+<span class="font-body-md text-body-md">Leave</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl" href="/invoices">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-body-md text-body-md">Invoices</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl" href="/payroll">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Payroll</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl" href="/expenses">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-body-md text-body-md">Expenses</span>
+</a>
+{% if current_user and current_user.role == 'Admin' %}
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl text-primary font-bold" href="/admin">
+<span class="material-symbols-outlined text-primary">shield</span>
+<span class="font-body-md text-body-md">Admin Panel</span>
+</a>
+{% endif %}
+</nav>
+<div class="mt-auto flex flex-col gap-xs border-t border-outline-variant pt-md">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl" href="/settings">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl" href="/support">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+<a class="flex items-center gap-md text-red-600 px-md py-sm hover:bg-red-50 transition-colors rounded-xl font-bold" href="/logout">
+<span class="material-symbols-outlined text-red-600" data-icon="logout">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+<div class="mt-md p-sm bg-surface-container rounded-xl flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-outline">
+<img class="w-full h-full object-cover" src="{{ current_user.avatar_url if current_user and current_user.avatar_url else 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFpCex_vqXn_efsMI02f04ET6IKfOGW1C6wVCimi98Lk48VP4OTPhwSFJwJJE5z33cC-65TeI9CWv0iBZT08TfrA_t-K5m22fFSgFbG7xqjlUxLq1d_26dP4ODC4rk4xTGmlLP8wy7QrnnvV6Q2JRcKuWrWNFHGPR9Zo8AKm53jBFLUQrhXBRYZnyxZxv8GurgsIKoQ36AmGkoMyrKqr5xEXU3-eMJZfEyiK1HmW-et88P9jB5rTxsaw' }}"/>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-md text-label-md font-bold truncate">{{ current_user.name if current_user else 'User' }}</p>
+<p class="text-[10px] text-on-surface-variant truncate">{{ current_user.role if current_user else 'Role' }}</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-256px)] h-16 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-lg">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">Operations Dashboard</span>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-surface-container rounded-full border-none text-body-md focus:ring-2 focus:ring-primary-container" placeholder="Search workflow..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="flex items-center gap-sm cursor-pointer" id="header-profile-trigger">
+<span class="text-sm font-semibold text-on-surface">{{ current_user.name if current_user else 'User' }}</span>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" src="{{ current_user.avatar_url if current_user and current_user.avatar_url else 'https://lh3.googleusercontent.com/aida-public/AB6AXuCl4YgXL5wGd_jVdjmapPaQz9nM9K0aH8LohrTtHuwYg8KXhXMRtYDaJfwePbtJD5uMeA9DpSSY46nBeOtwumkyaULvTI1QHRD0Q9b11hgbPA8DxnEvmiO-XsVFJ4HsLIBizmQIuDn-0GT13uoVFaDJzoKmzd0kmxSLEw1gK_5RxZnYNOWMeNSyGk7v72ukaIUP7J-fmdfG_qPfJvETnJjTMd495xUNzFMSBQ1jYMPFyd6f7NHZGkx1Nw' }}"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 p-margin-desktop min-h-screen">
+<div class="max-w-7xl mx-auto space-y-lg">
+<!-- Welcome Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-background">Leave Management</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Request, track, and manage your time off requests effortlessly.</p>
+</div>
+<div class="flex gap-md">
+<a href="/api/export/leaves" class="bg-primary text-on-primary px-lg py-sm rounded-xl font-body-md font-bold flex items-center gap-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]">download</span> Export CSV
+</a>
+<button class="bg-primary-container text-on-primary-container px-lg py-sm rounded-xl font-body-md font-bold flex items-center gap-sm hover:opacity-90 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                        New Workflow
+                    </button>
+</div>
+</div>
+<!-- Bento Grid: Stats and Request Form -->
+<div class="bento-grid">
+<!-- Balance Cards (6 Columns) -->
+<div class="col-span-12 lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Annual Leave -->
+<div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant flex flex-col justify-between hover:shadow-sm transition-shadow">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-primary p-2 bg-primary-fixed rounded-lg" data-icon="calendar_month">calendar_month</span>
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Accrued</span>
+</div>
+<div class="mt-xl">
+<p class="text-4xl font-bold text-on-background">{{ annual_leave_balance }}</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Annual Leave Days</p>
+</div>
+<div class="mt-md h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: {{ (annual_leave_balance / 20 * 100)|int }}%"></div>
+</div>
+</div>
+<!-- Sick Leave -->
+<div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant flex flex-col justify-between hover:shadow-sm transition-shadow">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-error p-2 bg-error-container rounded-lg" data-icon="medical_services">medical_services</span>
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Unlimited</span>
+</div>
+<div class="mt-xl">
+<p class="text-4xl font-bold text-on-background">{{ sick_leave_used }}</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Sick Days Used (YTD)</p>
+</div>
+<div class="mt-md h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-error" style="width: {{ min(100, (sick_leave_used / 20 * 100))|int }}%"></div>
+</div>
+</div>
+<!-- Personal Leave -->
+<div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant flex flex-col justify-between hover:shadow-sm transition-shadow">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary p-2 bg-tertiary-fixed rounded-lg" data-icon="person">person</span>
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Fixed</span>
+</div>
+<div class="mt-xl">
+<p class="text-4xl font-bold text-on-background">{{ personal_leave_balance }}</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Personal Days Left</p>
+</div>
+<div class="mt-md h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: {{ (personal_leave_balance / 6 * 100)|int }}%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Action Chart (4 Columns) -->
+<div class="hidden lg:flex col-span-4 bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden relative">
+
+<div class="relative z-10 p-lg flex flex-col h-full">
+<h3 class="font-headline-sm text-headline-sm mb-base">Team Distribution</h3>
+<p class="font-label-md text-label-md text-on-surface-variant mb-xl">Departmental Outages</p>
+<div class="flex-1 flex items-end gap-md">
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[40%]" title="Engineering"></div>
+<div class="flex-1 bg-primary-container rounded-t-lg h-[80%]" title="Design"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-[30%]" title="Sales"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg h-[60%]" title="Support"></div>
+</div>
+</div>
+</div>
+<!-- Request Form (4 Columns) -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-lowest p-lg rounded-xl border border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm mb-lg">Request Leave</h3>
+<form class="space-y-md" method="POST" action="/leave">
+<div>
+<label class="block font-label-md text-label-md mb-xs text-on-surface">Leave Type</label>
+<select name="leave_type" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-sm text-body-md focus:ring-2 focus:ring-primary outline-none">
+<option>Annual Leave</option>
+<option>Sick Leave</option>
+<option>Personal / Carer's</option>
+<option>Unpaid Leave</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div>
+<label class="block font-label-md text-label-md mb-xs text-on-surface">Start Date</label>
+<input name="start_date" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-sm text-body-md focus:ring-2 focus:ring-primary outline-none" type="date" required/>
+</div>
+<div>
+<label class="block font-label-md text-label-md mb-xs text-on-surface">End Date</label>
+<input name="end_date" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-sm text-body-md focus:ring-2 focus:ring-primary outline-none" type="date" required/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md mb-xs text-on-surface">Reason (Optional)</label>
+<textarea name="reason" class="w-full bg-surface-container-low border border-outline-variant rounded-lg p-sm text-body-md focus:ring-2 focus:ring-primary outline-none resize-none" placeholder="Brief explanation for the optimizer..." rows="3"></textarea>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container py-md rounded-xl font-bold hover:bg-primary transition-colors" type="submit">Submit Request</button>
+</form>
+</div>
+<!-- Table Content (8 Columns) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl border border-outline-variant flex flex-col">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm">Request History</h3>
+<div class="flex gap-sm">
+<button class="px-sm py-1 border border-outline-variant rounded-lg text-label-md font-bold text-on-surface-variant hover:bg-surface-container-low">Filters</button>
+<button class="px-sm py-1 border border-outline-variant rounded-lg text-label-md font-bold text-on-surface-variant hover:bg-surface-container-low">Export</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant text-label-md">
+<tr>
+<th class="px-lg py-md font-bold">TYPE</th>
+<th class="px-lg py-md font-bold">DURATION</th>
+<th class="px-lg py-md font-bold">STATUS</th>
+<th class="px-lg py-md font-bold">APPROVER</th>
+<th class="px-lg py-md font-bold"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+{% for req in leaves %}
+<tr class="leave-row hover:bg-surface-container transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-sm">
+  {% if req.status == 'Pending' %}
+  <div class="w-2 h-2 rounded-full bg-primary"></div>
+  {% elif req.status == 'Approved' %}
+  <div class="w-2 h-2 rounded-full bg-tertiary"></div>
+  {% else %}
+  <div class="w-2 h-2 rounded-full bg-error"></div>
+  {% endif %}
+<span class="font-body-md text-body-md font-medium">{{ req.leave_type }}</span>
+</div>
+</td>
+<td class="px-lg py-md font-code-sm text-code-sm text-on-surface-variant">
+  {{ req.start_date.strftime('%b %d') }} - {{ req.end_date.strftime('%b %d') }}
+  ({{ (req.end_date - req.start_date).days + 1 }}d)
+</td>
+<td class="px-lg py-md">
+  {% if req.status == 'Pending' %}
+  <span class="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full">Pending</span>
+  {% elif req.status == 'Approved' %}
+  <span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full">Approved</span>
+  {% else %}
+  <span class="bg-error-container text-on-error-container text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full">Rejected</span>
+  {% endif %}
+</td>
+<td class="px-lg py-md text-body-md text-on-surface-variant">{{ req.approver or 'System Policy' }}</td>
+<td class="px-lg py-md text-right">
+  {% if req.status == 'Pending' %}
+  <button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+  <span class="material-symbols-outlined">edit</span>
+  </button>
+  {% else %}
+  <button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+  <span class="material-symbols-outlined">visibility</span>
+  </button>
+  {% endif %}
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class="p-md bg-surface-container-low/50 mt-auto flex justify-between items-center text-label-md text-on-surface-variant">
+<span id="page-indicator">Page 1 of 1</span>
+<div class="flex gap-md">
+<button id="prev-page" class="hover:text-primary disabled:opacity-30 disabled:pointer-events-none" onclick="prevPage()">Previous</button>
+<button id="next-page" class="hover:text-primary font-bold disabled:opacity-30 disabled:pointer-events-none" onclick="nextPage()">Next</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Task Alert -->
+<div class="bg-on-background text-on-tertiary p-lg rounded-xl flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex items-center gap-lg">
+<div class="bg-primary p-3 rounded-full animate-pulse">
+<span class="material-symbols-outlined" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm">Efficiency Tip</h4>
+<p class="font-body-md text-body-md opacity-80">You have 5 unused annual leave days from last year expiring in 62 days.</p>
+</div>
+</div>
+<button onclick="planVacation()" class="bg-on-tertiary text-on-background px-lg py-sm rounded-xl font-bold hover:bg-surface-container transition-colors shrink-0">Plan Vacation</button>
+</div>
+</div>
+</main>
+<!-- FAB Suppression: This is a details/management page, so we follow the suppression rule unless adding. The "New Workflow" acts as our primary anchor inside the header/content. No global FAB needed. -->
+<script>
+        function planVacation() {
+            const form = document.querySelector('form[action="/leave"]');
+            if (form) {
+                form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const startDateInput = form.querySelector('input[name="start_date"]');
+                if (startDateInput) {
+                    setTimeout(() => {
+                        startDateInput.focus();
+                        if (typeof startDateInput.showPicker === 'function') {
+                            startDateInput.showPicker();
+                        }
+                    }, 500);
+                }
+            }
+        }
+
+        // Micro-interactions
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.classList.add('translate-x-1');
+                row.style.transition = 'transform 0.2s ease-out, background-color 0.2s';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.classList.remove('translate-x-1');
+            });
+        });
+
+        // Tonal layer handling on scroll
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+                header.classList.remove('shadow-none');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.add('shadow-none');
+            }
+        });
+
+        // Pagination & Search script
+        let currentRows = Array.from(document.querySelectorAll('.leave-row'));
+        let currentPage = 1;
+        const rowsPerPage = 5;
+        
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            
+            const allRows = Array.from(document.querySelectorAll('.leave-row'));
+            allRows.forEach(row => row.style.display = 'none');
+            
+            currentRows.forEach((row, index) => {
+                if (index >= start && index < end) {
+                    row.style.display = '';
+                }
+            });
+            
+            const totalPages = Math.ceil(currentRows.length / rowsPerPage) || 1;
+            document.getElementById('page-indicator').textContent = `Page ${page} of ${totalPages}`;
+            document.getElementById('prev-page').disabled = (page === 1);
+            document.getElementById('next-page').disabled = (page === totalPages);
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        }
+        
+        function nextPage() {
+            const totalPages = Math.ceil(currentRows.length / rowsPerPage) || 1;
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        }
+        
+        window.triggerClientSearch = (query) => {
+            const allRows = Array.from(document.querySelectorAll('.leave-row'));
+            if (!query) {
+                currentRows = allRows;
+            } else {
+                currentRows = allRows.filter(row => {
+                    return row.textContent.toLowerCase().includes(query);
+                });
+            }
+            currentPage = 1;
+            showPage(1);
+        };
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage(1);
+        });
+    </script>
+    <!-- Include Global Launcher Components (Apps, Notifications, Profile Redirects, Sidebars) -->
+    <script src="/static/js/global_components.js"></script>
+</body>
+</html>

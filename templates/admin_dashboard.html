@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Operations Center - BPA Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0F52BA',
+                        'primary-container': '#D7E3FF',
+                        'on-primary-container': '#001B3E',
+                        secondary: '#3B6B9C',
+                        tertiary: '#5D5F7D',
+                        error: '#BA1A1A',
+                        'error-container': '#FFDAD6',
+                        'on-error-container': '#410002',
+                        background: '#F8F9FA',
+                        surface: '#FDFDFF',
+                        'surface-container-low': '#F0F3FA',
+                        'surface-container-lowest': '#FFFFFF',
+                        'surface-container-high': '#EAEBEF',
+                        'surface-container-highest': '#E2E2E6',
+                        'on-surface': '#1A1C1E',
+                        'on-surface-variant': '#43474E',
+                        outline: '#73777F',
+                        'outline-variant': '#C3C6CF',
+                    },
+                    spacing: {
+                        xs: '4px',
+                        sm: '8px',
+                        md: '16px',
+                        lg: '24px',
+                        xl: '32px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--tw-color-background);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant p-lg flex flex-col gap-lg z-50">
+        <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary text-[32px]">shield_person</span>
+            <div>
+                <h1 class="font-bold text-lg leading-tight">Admin Center</h1>
+                <p class="text-xs text-on-surface-variant opacity-70 font-mono">BPA Suite Console</p>
+            </div>
+        </div>
+        
+        <nav class="flex-1 space-y-1">
+            <button onclick="switchTab('dashboard')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-dashboard">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span class="font-body-md text-body-md">Dashboard Overview</span>
+            </button>
+            <button onclick="switchTab('employees')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-employees">
+                <span class="material-symbols-outlined">badge</span>
+                <span class="font-body-md text-body-md">Employee Profiles</span>
+            </button>
+            <button onclick="switchTab('attendance')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-attendance">
+                <span class="material-symbols-outlined">date_range</span>
+                <span class="font-body-md text-body-md">Attendance logs</span>
+            </button>
+            <button onclick="switchTab('leaves')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-leaves">
+                <span class="material-symbols-outlined">event_busy</span>
+                <span class="font-body-md text-body-md">Leave Approvals</span>
+            </button>
+            <button onclick="switchTab('invoices')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-invoices">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span class="font-body-md text-body-md">Invoices & Bills</span>
+            </button>
+            <button onclick="switchTab('payroll')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-payroll">
+                <span class="material-symbols-outlined">payments</span>
+                <span class="font-body-md text-body-md">Payroll Management</span>
+            </button>
+            <button onclick="switchTab('expenses')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-expenses">
+                <span class="material-symbols-outlined">wallet</span>
+                <span class="font-body-md text-body-md">Expense Claims</span>
+            </button>
+            <button onclick="switchTab('logs')" class="w-full flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors rounded-xl sidebar-link text-left" id="link-logs">
+                <span class="material-symbols-outlined">description</span>
+                <span class="font-body-md text-body-md">System Activity Logs</span>
+            </button>
+        </nav>
+
+        <div class="mt-auto pt-md border-t border-outline-variant space-y-1">
+            <a class="flex items-center gap-md text-primary px-md py-sm hover:bg-primary-container/20 transition-colors rounded-xl font-bold" href="/payroll">
+                <span class="material-symbols-outlined">login</span>
+                <span class="font-body-md text-body-md">Return User Suite</span>
+            </a>
+            <a class="flex items-center gap-md text-red-600 px-md py-sm hover:bg-red-50 transition-colors rounded-xl font-bold mb-md" href="/logout">
+                <span class="material-symbols-outlined">logout</span>
+                <span class="font-body-md text-body-md">Logout</span>
+            </a>
+            <div class="mt-md p-sm bg-surface-container rounded-xl flex items-center gap-sm cursor-pointer hover:opacity-85 transition-opacity" onclick="window.location.href='/settings'">
+                <div class="w-8 h-8 rounded-full overflow-hidden bg-outline">
+                    <img class="w-full h-full object-cover" src="{{ current_user.avatar_url if current_user and current_user.avatar_url else 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFpCex_vqXn_efsMI02f04ET6IKfOGW1C6wVCimi98Lk48VP4OTPhwSFJwJJE5z33cC-65TeI9CWv0iBZT08TfrA_t-K5m22fFSgFbG7xqjlUxLq1d_26dP4ODC4rk4xTGmlLP8wy7QrnnvV6Q2JRcKuWrWNFHGPR9Zo8AKm53jBFLUQrhXBRYZnyxZxv8GurgsIKoQ36AmGkoMyrKqr5xEXU3-eMJZfEyiK1HmW-et88P9jB5rTxsaw' }}"/>
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <p class="font-label-md text-label-md font-bold truncate text-on-surface">{{ current_user.name if current_user else 'Admin User' }}</p>
+                    <p class="text-[10px] text-on-surface-variant truncate">{{ current_user.role if current_user else 'Admin' }}</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-0 right-0 w-[calc(100%-256px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-lg z-40">
+        <div class="flex items-center gap-lg">
+            <span class="font-headline-sm text-headline-sm font-bold text-primary">Admin Console</span>
+            <div class="relative w-64">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+                <input class="w-full pl-10 pr-4 py-1.5 bg-surface-container rounded-full border-none text-body-md focus:ring-2 focus:ring-primary-container" placeholder="Search Console..." type="text"/>
+            </div>
+        </div>
+        <div class="flex items-center gap-md">
+            <button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-transform active:scale-95">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-transform active:scale-95">
+                <span class="material-symbols-outlined">apps</span>
+            </button>
+            <div class="flex items-center gap-sm cursor-pointer" id="header-profile-trigger">
+                <span class="text-sm font-semibold text-on-surface">{{ current_user.name if current_user else 'Admin User' }}</span>
+                <div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+                    <img class="w-full h-full object-cover" src="{{ current_user.avatar_url if current_user and current_user.avatar_url else 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFpCex_vqXn_efsMI02f04ET6IKfOGW1C6wVCimi98Lk48VP4OTPhwSFJwJJE5z33cC-65TeI9CWv0iBZT08TfrA_t-K5m22fFSgFbG7xqjlUxLq1d_26dP4ODC4rk4xTGmlLP8wy7QrnnvV6Q2JRcKuWrWNFHGPR9Zo8AKm53jBFLUQrhXBRYZnyxZxv8GurgsIKoQ36AmGkoMyrKqr5xEXU3-eMJZfEyiK1HmW-et88P9jB5rTxsaw' }}"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="ml-64 min-h-screen pt-24 px-lg pb-lg flex flex-col gap-lg flex-1">
+        
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="w-full">
+              {% for msg in messages %}
+                <div class="bg-primary-container text-on-primary-container px-lg py-sm rounded-lg border border-primary/20 text-body-md shadow-sm mb-xs flex items-center justify-between">
+                  <span>{{ msg }}</span>
+                  <button class="material-symbols-outlined text-[18px] opacity-70 hover:opacity-100" onclick="this.parentElement.remove()">close</button>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- TAB: DASHBOARD OVERVIEW -->
+        <div id="tab-dashboard" class="tab-pane hidden space-y-lg">
+            <div>
+                <h2 class="font-display-lg text-display-lg text-on-background text-3xl font-bold">Operations Dashboard</h2>
+                <p class="font-body-lg text-body-lg text-on-surface-variant">Real-time status analysis and summary metrics.</p>
+            </div>
+            
+            <!-- Metrics Summary Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl flex flex-col justify-between shadow-sm">
+                    <div>
+                        <p class="text-label-md text-on-surface-variant mb-xs">Total Staff Registered</p>
+                        <span class="text-display-lg font-bold text-3xl text-primary">{{ total_employees }} Employees</span>
+                    </div>
+                    <button onclick="switchTab('employees')" class="text-left text-xs text-primary font-bold mt-md hover:underline">Manage Profiles &rarr;</button>
+                </div>
+                <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl flex flex-col justify-between shadow-sm">
+                    <div>
+                        <p class="text-label-md text-on-surface-variant mb-xs">Active Clock-Ins Today</p>
+                        <span class="text-display-lg font-bold text-3xl text-secondary">{{ clocked_in_today }} Online</span>
+                    </div>
+                    <button onclick="switchTab('attendance')" class="text-left text-xs text-secondary font-bold mt-md hover:underline">Manage Timelog logs &rarr;</button>
+                </div>
+                <div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl flex flex-col justify-between shadow-sm">
+                    <div>
+                        <p class="text-label-md text-on-surface-variant mb-xs font-bold text-error">Pending Approvals</p>
+                        <div class="text-display-lg font-bold text-xl text-on-surface space-y-1">
+                            <p class="text-sm font-normal"><span class="font-bold text-error">{{ pending_leaves }}</span> Leaves</p>
+                            <p class="text-sm font-normal"><span class="font-bold text-error">{{ pending_expenses }}</span> Claims</p>
+                            <p class="text-sm font-normal"><span class="font-bold text-error">{{ pending_invoices }}</span> Invoices</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-md">
+                        <button onclick="switchTab('leaves')" class="text-xs text-error font-bold hover:underline">Leaves</button>
+                        <span class="text-gray-300">|</span>
+                        <button onclick="switchTab('expenses')" class="text-xs text-error font-bold hover:underline">Claims</button>
+                        <span class="text-gray-300">|</span>
+                        <button onclick="switchTab('invoices')" class="text-xs text-error font-bold hover:underline">Invoices</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: EMPLOYEES -->
+        <div id="tab-employees" class="tab-pane hidden space-y-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-3xl font-bold text-on-background">Employee Profiles</h2>
+                    <p class="text-on-surface-variant">Perform full CRUD, role definitions, and salary assignments.</p>
+                </div>
+                <div class="flex gap-2">
+                    <a href="/api/export/employees" class="bg-indigo-600 text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">download</span> Export CSV
+                    </a>
+                    <button onclick="openModal('employee-add-modal')" class="bg-primary text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">add</span> Add Employee
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search and filters -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-wrap gap-md items-center">
+                <input id="employee-search" type="text" placeholder="Search by name, email..." oninput="filterEmployees()" class="border border-outline-variant p-sm rounded-lg text-body-md w-72 focus:border-primary focus:ring-1 focus:ring-primary outline-none" />
+                <select id="employee-dept-filter" onchange="filterEmployees()" class="border border-outline-variant p-sm rounded-lg text-body-md bg-white">
+                    <option value="">All Departments</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Product">Product</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Sales">Sales</option>
+                </select>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse" id="employee-table">
+                    <thead>
+                        <tr class="bg-surface-container-low text-on-surface border-b border-outline-variant">
+                            <th class="px-lg py-md font-label-md text-label-md">Details</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Department</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Gross Salary</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Status</th>
+                            <th class="px-lg py-md font-label-md text-label-md text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant">
+                        {% for emp in employees %}
+                        <tr class="hover:bg-surface-container-low/30 transition-colors employee-row" data-name="{{ emp.name.lower() }}" data-email="{{ emp.email.lower() }}" data-dept="{{ emp.department }}">
+                            <td class="px-lg py-md">
+                                <div class="flex items-center gap-md">
+                                    <img class="w-10 h-10 rounded-full border object-cover" src="{{ emp.avatar_url }}" alt="avatar" />
+                                    <div>
+                                        <p class="font-medium text-body-md text-on-surface">{{ emp.name }}</p>
+                                        <p class="text-xs text-on-surface-variant">{{ emp.role }} &bull; {{ emp.email }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-lg py-md text-body-md">{{ emp.department }}</td>
+                            <td class="px-lg py-md font-medium text-body-md">${{ "{:,.2f}".format(emp.gross_pay) }}</td>
+                            <td class="px-lg py-md">
+                                <span class="status-pill {% if emp.status == 'Paid' %}bg-primary/10 text-primary{% elif emp.status == 'Ready' %}bg-green-100 text-green-700{% else %}bg-error/10 text-error{% endif %}">{{ emp.status }}</span>
+                            </td>
+                            <td class="px-lg py-md text-right space-x-2">
+                                <button onclick="openEditEmployeeModal({{ emp.id }}, '{{ emp.name|escape }}', '{{ emp.role|escape }}', '{{ emp.department|escape }}', '{{ emp.email|escape }}', {{ emp.gross_pay }}, {{ emp.deductions }}, '{{ emp.status }}')" class="text-primary hover:underline text-sm font-semibold">Edit</button>
+                                <a href="/admin/employee/delete/{{ emp.id }}" onclick="return confirm('Are you sure you want to delete this employee?')" class="text-error hover:underline text-sm font-semibold">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-lg">
+                    <button id="prev-emp-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="prevEmpPage()">Previous</button>
+                    <span id="emp-page-indicator" class="text-xs text-slate-500 font-bold">Page 1 of 1</span>
+                    <button id="next-emp-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="nextEmpPage()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: ATTENDANCE -->
+        <div id="tab-attendance" class="tab-pane hidden space-y-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-3xl font-bold text-on-background">Attendance Logs</h2>
+                    <p class="text-on-surface-variant">Update manually, correct incorrect check-in/out records, or delete incorrect timelogs.</p>
+                </div>
+                <div class="flex gap-2">
+                    <a href="/api/export/attendance" class="bg-indigo-600 text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">download</span> Export CSV
+                    </a>
+                    <button onclick="openModal('attendance-add-modal')" class="bg-primary text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">add</span> Manual Entry
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low text-on-surface border-b border-outline-variant">
+                            <th class="px-lg py-md font-label-md text-label-md">Employee</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Date</th>
+                            <th class="px-lg py-md font-label-md text-label-md">In / Out</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Status</th>
+                            <th class="px-lg py-md font-label-md text-label-md text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant">
+                        {% for log in attendance_logs %}
+                        <tr class="hover:bg-surface-container-low/30 transition-colors admin-att-row">
+                            <td class="px-lg py-md text-body-md font-medium">{{ log.employee.name }}</td>
+                            <td class="px-lg py-md text-body-md">{{ log.date.strftime('%b %d, %Y') }}</td>
+                            <td class="px-lg py-md text-body-md font-mono">{{ log.check_in_time }} - {{ log.check_out_time or 'Active' }}</td>
+                            <td class="px-lg py-md">
+                                <span class="status-pill {% if log.status == 'On Time' %}bg-green-100 text-green-700{% elif log.status == 'Late' %}bg-amber-100 text-amber-700{% else %}bg-error/10 text-error{% endif %}">{{ log.status }}</span>
+                            </td>
+                            <td class="px-lg py-md text-right space-x-2">
+                                <button onclick="openEditAttendanceModal({{ log.id }}, '{{ log.date.strftime('%Y-%m-%d') }}', '{{ log.check_in_time }}', '{{ log.check_out_time or '' }}', '{{ log.status }}')" class="text-primary hover:underline text-sm font-semibold">Correct</button>
+                                <a href="/admin/attendance/delete/{{ log.id }}" onclick="return confirm('Delete this attendance log?')" class="text-error hover:underline text-sm font-semibold">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-lg">
+                    <button id="prev-att-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="prevAttPage()">Previous</button>
+                    <span id="att-page-indicator" class="text-xs text-slate-500 font-bold">Page 1 of 1</span>
+                    <button id="next-att-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="nextAttPage()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: LEAVES -->
+        <div id="tab-leaves" class="tab-pane hidden space-y-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-3xl font-bold text-on-background">Leave Approval Center</h2>
+                    <p class="text-on-surface-variant">Review pending leave requests, approve time off, or reject invalid leave entries.</p>
+                </div>
+                <a href="/api/export/leaves" class="bg-indigo-600 text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                    <span class="material-symbols-outlined">download</span> Export CSV
+                </a>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low text-on-surface border-b border-outline-variant">
+                            <th class="px-lg py-md font-label-md text-label-md">Employee</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Leave Type</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Duration</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Reason</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Status</th>
+                            <th class="px-lg py-md font-label-md text-label-md text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant">
+                        {% for req in leave_requests %}
+                        <tr class="hover:bg-surface-container-low/30 transition-colors admin-leave-row">
+                            <td class="px-lg py-md text-body-md font-medium">{{ req.employee.name }}</td>
+                            <td class="px-lg py-md text-body-md">{{ req.leave_type }}</td>
+                            <td class="px-lg py-md text-body-md text-xs">{{ req.start_date.strftime('%b %d') }} to {{ req.end_date.strftime('%b %d, %Y') }}</td>
+                            <td class="px-lg py-md text-body-md italic text-on-surface-variant">"{{ req.reason or '' }}"</td>
+                            <td class="px-lg py-md">
+                                <span class="status-pill {% if req.status == 'Approved' %}bg-green-100 text-green-700{% elif req.status == 'Rejected' %}bg-error/10 text-error{% else %}bg-amber-100 text-amber-700{% endif %}">{{ req.status }}</span>
+                            </td>
+                            <td class="px-lg py-md text-right space-x-2">
+                                {% if req.status == 'Pending' %}
+                                <a href="/admin/leave/approve/{{ req.id }}" class="text-green-600 hover:underline text-sm font-semibold">Approve</a>
+                                <a href="/admin/leave/reject/{{ req.id }}" class="text-error hover:underline text-sm font-semibold">Reject</a>
+                                {% endif %}
+                                <a href="/admin/leave/delete/{{ req.id }}" onclick="return confirm('Delete leave request?')" class="text-outline hover:underline text-sm font-semibold">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-lg">
+                    <button id="prev-leave-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="prevLeavePage()">Previous</button>
+                    <span id="leave-page-indicator" class="text-xs text-slate-500 font-bold">Page 1 of 1</span>
+                    <button id="next-leave-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="nextLeavePage()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: INVOICES -->
+        <div id="tab-invoices" class="tab-pane hidden space-y-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-3xl font-bold text-on-background">Invoices & Bills</h2>
+                    <p class="text-on-surface-variant">Extract bills automatically, approve invoices, edit details, or delete records.</p>
+                </div>
+                <div class="flex gap-2">
+                    <a href="/api/export/invoices" class="bg-indigo-600 text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">download</span> Export CSV
+                    </a>
+                    <button onclick="openModal('invoice-add-modal')" class="bg-primary text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">add</span> Create Invoice
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low text-on-surface border-b border-outline-variant">
+                            <th class="px-lg py-md font-label-md text-label-md">Invoice #</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Vendor</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Amount</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Status</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Payment</th>
+                            <th class="px-lg py-md font-label-md text-label-md text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant">
+                        {% for inv in invoices %}
+                        <tr class="hover:bg-surface-container-low/30 transition-colors admin-inv-row">
+                            <td class="px-lg py-md text-body-md font-mono">{{ inv.invoice_number }}</td>
+                            <td class="px-lg py-md text-body-md font-medium">{{ inv.vendor }}</td>
+                            <td class="px-lg py-md text-body-md font-bold">${{ "{:,.2f}".format(inv.amount) }}</td>
+                            <td class="px-lg py-md">
+                                <span class="status-pill {% if inv.status == 'Validated' %}bg-green-100 text-green-700{% elif inv.status == 'Extracting' %}bg-blue-100 text-blue-700{% else %}bg-amber-100 text-amber-700{% endif %}">{{ inv.status }}</span>
+                            </td>
+                            <td class="px-lg py-md">
+                                <span class="status-pill {% if inv.payment_status == 'Paid' %}bg-primary/10 text-primary{% else %}bg-outline-variant text-outline{% endif %}">{{ inv.payment_status }}</span>
+                            </td>
+                            <td class="px-lg py-md text-right space-x-2">
+                                <button onclick="openEditInvoiceModal({{ inv.id }}, '{{ inv.vendor|escape }}', '{{ inv.invoice_number|escape }}', {{ inv.amount }}, '{{ inv.date.strftime('%Y-%m-%d') }}', '{{ inv.due_date.strftime('%Y-%m-%d') if inv.due_date else '' }}', '{{ inv.status }}', '{{ inv.payment_status }}')" class="text-primary hover:underline text-sm font-semibold">Edit</button>
+                                {% if inv.payment_status != 'Paid' %}
+                                <a href="/admin/invoice/approve/{{ inv.id }}" class="text-green-600 hover:underline text-sm font-semibold">Pay</a>
+                                {% endif %}
+                                <a href="/admin/invoice/delete/{{ inv.id }}" onclick="return confirm('Delete this invoice?')" class="text-error hover:underline text-sm font-semibold">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-lg">
+                    <button id="prev-inv-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="prevInvPage()">Previous</button>
+                    <span id="inv-page-indicator" class="text-xs text-slate-500 font-bold">Page 1 of 1</span>
+                    <button id="next-inv-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="nextInvPage()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: PAYROLL -->
+        <div id="tab-payroll" class="tab-pane hidden space-y-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-3xl font-bold text-on-background">Payroll & Payslips</h2>
+                    <p class="text-on-surface-variant">Edit employee salaries, configure deductions, and generate or print payslips.</p>
+                </div>
+                <a href="/api/export/employees" class="bg-indigo-600 text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                    <span class="material-symbols-outlined">download</span> Export CSV
+                </a>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low text-on-surface border-b border-outline-variant">
+                            <th class="px-lg py-md font-label-md text-label-md">Employee</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Gross Salary</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Deductions</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Net Salary</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Payment Status</th>
+                            <th class="px-lg py-md font-label-md text-label-md text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant">
+                        {% for emp in employees %}
+                        <tr class="hover:bg-surface-container-low/30 transition-colors admin-pay-row">
+                            <td class="px-lg py-md text-body-md font-medium">{{ emp.name }}</td>
+                            <td class="px-lg py-md text-body-md font-mono">${{ "{:,.2f}".format(emp.gross_pay) }}</td>
+                            <td class="px-lg py-md text-body-md font-mono text-error">-${{ "{:,.2f}".format(emp.deductions) }}</td>
+                            <td class="px-lg py-md text-body-md font-bold text-primary font-mono">${{ "{:,.2f}".format(emp.net_pay) }}</td>
+                            <td class="px-lg py-md">
+                                <span class="status-pill {% if emp.status == 'Paid' %}bg-primary/10 text-primary{% elif emp.status == 'Ready' %}bg-green-100 text-green-700{% else %}bg-error/10 text-error{% endif %}">{{ emp.status }}</span>
+                            </td>
+                            <td class="px-lg py-md text-right space-x-2">
+                                <button onclick="openEditPayrollModal({{ emp.id }}, {{ emp.gross_pay }}, {{ emp.deductions }}, '{{ emp.status }}')" class="text-primary hover:underline text-sm font-semibold">Adjust Wages</button>
+                                <a href="/admin/payroll/payslip/{{ emp.id }}" target="_blank" class="text-secondary hover:underline text-sm font-semibold">Generate Payslip</a>
+                                <a href="/admin/payroll/delete/{{ emp.id }}" onclick="return confirm('Reset salary configuration?')" class="text-outline hover:underline text-sm font-semibold">Reset</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-lg">
+                    <button id="prev-pay-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="prevPayPage()">Previous</button>
+                    <span id="pay-page-indicator" class="text-xs text-slate-500 font-bold">Page 1 of 1</span>
+                    <button id="next-pay-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="nextPayPage()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: EXPENSES -->
+        <div id="tab-expenses" class="tab-pane hidden space-y-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-3xl font-bold text-on-background">Expense Claims Manager</h2>
+                    <p class="text-on-surface-variant">Approve or reject employee reimbursement claims, edit details, or delete logs.</p>
+                </div>
+                <div class="flex gap-2">
+                    <a href="/api/export/expenses" class="bg-indigo-600 text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">download</span> Export CSV
+                    </a>
+                    <button onclick="openModal('expense-add-modal')" class="bg-primary text-white font-label-md text-sm px-lg py-sm rounded-lg hover:opacity-90 transition-all flex items-center gap-sm">
+                        <span class="material-symbols-outlined">add</span> Create Claim
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low text-on-surface border-b border-outline-variant">
+                            <th class="px-lg py-md font-label-md text-label-md">Receipt</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Details</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Date</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Amount</th>
+                            <th class="px-lg py-md font-label-md text-label-md">Status</th>
+                            <th class="px-lg py-md font-label-md text-label-md text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant">
+                        {% for claim in expenses %}
+                        <tr class="hover:bg-surface-container-low/30 transition-colors admin-exp-row">
+                            <td class="px-lg py-md">
+                                <div class="w-10 h-10 border overflow-hidden rounded bg-gray-100 flex items-center justify-center">
+                                    <img class="w-full h-full object-cover" src="{{ claim.receipt_url }}" alt="Receipt" />
+                                </div>
+                            </td>
+                            <td class="px-lg py-md">
+                                <p class="font-medium text-body-md">{{ claim.title }}</p>
+                                <p class="text-xs text-on-surface-variant">{{ claim.employee.name }} &bull; {{ claim.category }}</p>
+                            </td>
+                            <td class="px-lg py-md text-body-md">{{ claim.date.strftime('%b %d, %Y') }}</td>
+                            <td class="px-lg py-md text-body-md font-bold text-primary">${{ "{:,.2f}".format(claim.amount) }}</td>
+                            <td class="px-lg py-md">
+                                <span class="status-pill {% if claim.status == 'Approved' %}bg-green-100 text-green-700{% elif claim.status == 'Rejected' %}bg-error/10 text-error{% else %}bg-amber-100 text-amber-700{% endif %}">{{ claim.status }}</span>
+                            </td>
+                            <td class="px-lg py-md text-right space-x-2">
+                                <button onclick="openEditExpenseModal({{ claim.id }}, '{{ claim.title|escape }}', '{{ claim.category|escape }}', {{ claim.amount }}, '{{ claim.date.strftime('%Y-%m-%d') }}', '{{ claim.status }}')" class="text-primary hover:underline text-sm font-semibold">Edit</button>
+                                {% if claim.status != 'Approved' and claim.status != 'Rejected' %}
+                                <a href="/admin/expense/approve/{{ claim.id }}" class="text-green-600 hover:underline text-sm font-semibold">Approve</a>
+                                <a href="/admin/expense/reject/{{ claim.id }}" class="text-error hover:underline text-sm font-semibold">Reject</a>
+                                {% endif %}
+                                <a href="/admin/expense/delete/{{ claim.id }}" onclick="return confirm('Delete this expense claim?')" class="text-outline hover:underline text-sm font-semibold">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-lg">
+                    <button id="prev-exp-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="prevExpPage()">Previous</button>
+                    <span id="exp-page-indicator" class="text-xs text-slate-500 font-bold">Page 1 of 1</span>
+                    <button id="next-exp-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="nextExpPage()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: SYSTEM LOGS -->
+        <div id="tab-logs" class="tab-pane hidden space-y-lg">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="font-display-lg text-display-lg text-3xl font-bold">System Activity Logs</h2>
+                        <p class="font-body-lg text-body-lg text-on-surface-variant">Automated audit trail and execution history logs.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                    <div class="p-md bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+                        <span class="text-sm font-bold text-on-surface">Audit Records</span>
+                        <input type="text" id="log-search" oninput="filterLogs()" placeholder="Search logs..." class="px-sm py-1 border border-outline-variant rounded-lg text-xs outline-none bg-surface focus:ring-2 focus:ring-primary/20 w-48" />
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-surface-container text-xs font-bold text-on-surface-variant border-b border-outline-variant">
+                                    <th class="px-lg py-md">TIMESTAMP</th>
+                                    <th class="px-lg py-md">CATEGORY</th>
+                                    <th class="px-lg py-md">USER / AGENT</th>
+                                    <th class="px-lg py-md">ACTION PERFORMED</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logs-tbody" class="divide-y divide-outline-variant">
+                                {% for log in activity_logs %}
+                                <tr class="log-item-row hover:bg-surface-container-low/30 transition-colors text-sm">
+                                    <td class="px-lg py-md text-on-surface-variant font-mono text-xs">{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    <td class="px-lg py-md">
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-semibold
+                                            {% if log.category == 'System' %}
+                                                bg-blue-100 text-blue-700
+                                            {% elif log.category == 'Security' %}
+                                                bg-purple-100 text-purple-700
+                                            {% elif log.category == 'Payroll' %}
+                                                bg-green-100 text-green-700
+                                            {% elif log.category == 'Invoice' %}
+                                                bg-amber-100 text-amber-700
+                                            {% else %}
+                                                bg-slate-100 text-slate-700
+                                            {% endif %}">
+                                            {{ log.category }}
+                                        </span>
+                                    </td>
+                                    <td class="px-lg py-md text-on-surface font-semibold text-xs">{{ log.user_email or 'System Scheduler' }}</td>
+                                    <td class="px-lg py-md text-on-surface">{{ log.action }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-lg">
+                        <button id="prev-logs-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="prevLogsPage()">Previous</button>
+                        <span id="logs-page-indicator" class="text-xs text-slate-500 font-bold">Page 1 of 1</span>
+                        <button id="next-logs-page" class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none" onclick="nextLogsPage()">Next</button>
+                    </div>
+                </div>
+        </div>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODALS SECTION -->
+    <!-- ========================================== -->
+
+    <!-- MODAL: ADD EMPLOYEE -->
+    <div id="employee-add-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Add New Employee</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('employee-add-modal')">close</button>
+            </div>
+            <form action="/admin/employee/add" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Full Name</label>
+                    <input type="text" name="name" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Role / Designation</label>
+                        <input type="text" name="role" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Department</label>
+                        <select name="department" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Engineering</option>
+                            <option>Product</option>
+                            <option>Marketing</option>
+                            <option>Sales</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Email Address</label>
+                    <input type="email" name="email" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Gross Salary ($)</label>
+                        <input type="number" name="gross_pay" step="0.01" value="0.00" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Tax Deductions ($)</label>
+                        <input type="number" name="deductions" step="0.01" value="0.00" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Register Employee</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT EMPLOYEE -->
+    <div id="employee-edit-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Modify Employee Profile</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('employee-edit-modal')">close</button>
+            </div>
+            <form id="employee-edit-form" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Full Name</label>
+                    <input type="text" name="name" id="edit-emp-name" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Role / Designation</label>
+                        <input type="text" name="role" id="edit-emp-role" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Department</label>
+                        <select name="department" id="edit-emp-dept" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Engineering</option>
+                            <option>Product</option>
+                            <option>Marketing</option>
+                            <option>Sales</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Email Address</label>
+                    <input type="email" name="email" id="edit-emp-email" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Gross Salary ($)</label>
+                        <input type="number" name="gross_pay" id="edit-emp-gross" step="0.01" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Tax Deductions ($)</label>
+                        <input type="number" name="deductions" id="edit-emp-deductions" step="0.01" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Status</label>
+                    <select name="status" id="edit-emp-status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        <option>Ready</option>
+                        <option>On Hold</option>
+                        <option>Review Required</option>
+                        <option>Paid</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Apply Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD ATTENDANCE -->
+    <div id="attendance-add-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Manual Attendance Entry</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('attendance-add-modal')">close</button>
+            </div>
+            <form action="/admin/attendance/add" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Employee</label>
+                    <select name="employee_id" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        {% for emp in employees %}
+                        <option value="{{ emp.id }}">{{ emp.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Date</label>
+                    <input type="date" name="date" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Check In Time</label>
+                        <input type="text" name="check_in_time" placeholder="09:00 AM" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Check Out Time</label>
+                        <input type="text" name="check_out_time" placeholder="05:30 PM" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Status</label>
+                    <select name="status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        <option>On Time</option>
+                        <option>Late</option>
+                        <option>Absent</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Record Attendance</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT ATTENDANCE -->
+    <div id="attendance-edit-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Correct Attendance Log</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('attendance-edit-modal')">close</button>
+            </div>
+            <form id="attendance-edit-form" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Date</label>
+                    <input type="date" name="date" id="edit-att-date" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Check In Time</label>
+                        <input type="text" name="check_in_time" id="edit-att-in" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Check Out Time</label>
+                        <input type="text" name="check_out_time" id="edit-att-out" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Status</label>
+                    <select name="status" id="edit-att-status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        <option>On Time</option>
+                        <option>Late</option>
+                        <option>Absent</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Save Corrections</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD INVOICE -->
+    <div id="invoice-add-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Create Bill / Invoice</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('invoice-add-modal')">close</button>
+            </div>
+            <form action="/admin/invoice/add" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Vendor Name</label>
+                    <input type="text" name="vendor" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Invoice Number</label>
+                        <input type="text" name="invoice_number" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Invoice Value ($)</label>
+                        <input type="number" step="0.01" name="amount" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Invoice Date</label>
+                        <input type="date" name="date" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Due Date</label>
+                        <input type="date" name="due_date" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Extraction Status</label>
+                        <select name="status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Review</option>
+                            <option>Extracting</option>
+                            <option>Validated</option>
+                            <option>Flagged</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Payment Status</label>
+                        <select name="payment_status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Pending</option>
+                            <option>Paid</option>
+                            <option>Void</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Register Invoice</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT INVOICE -->
+    <div id="invoice-edit-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Modify Invoice Details</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('invoice-edit-modal')">close</button>
+            </div>
+            <form id="invoice-edit-form" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Vendor Name</label>
+                    <input type="text" name="vendor" id="edit-inv-vendor" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Invoice Number</label>
+                        <input type="text" name="invoice_number" id="edit-inv-num" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Invoice Value ($)</label>
+                        <input type="number" step="0.01" name="amount" id="edit-inv-amount" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Invoice Date</label>
+                        <input type="date" name="date" id="edit-inv-date" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Due Date</label>
+                        <input type="date" name="due_date" id="edit-inv-due" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Extraction Status</label>
+                        <select name="status" id="edit-inv-status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Review</option>
+                            <option>Extracting</option>
+                            <option>Validated</option>
+                            <option>Flagged</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Payment Status</label>
+                        <select name="payment_status" id="edit-inv-pay" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Pending</option>
+                            <option>Paid</option>
+                            <option>Void</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Save Invoice</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADJUST PAYROLL -->
+    <div id="payroll-edit-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Configure Wages</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('payroll-edit-modal')">close</button>
+            </div>
+            <form id="payroll-edit-form" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Gross Pay ($)</label>
+                    <input type="number" step="0.01" name="gross_pay" id="edit-pay-gross" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Tax Deductions ($)</label>
+                    <input type="number" step="0.01" name="deductions" id="edit-pay-deductions" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Payroll Release Status</label>
+                    <select name="status" id="edit-pay-status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        <option>Ready</option>
+                        <option>On Hold</option>
+                        <option>Review Required</option>
+                        <option>Paid</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Release Salary Adjustment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD EXPENSE -->
+    <div id="expense-add-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Create Reimbursement Claim</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('expense-add-modal')">close</button>
+            </div>
+            <form action="/admin/expense/add" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Employee claimant</label>
+                    <select name="employee_id" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        {% for emp in employees %}
+                        <option value="{{ emp.id }}">{{ emp.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Expense Title</label>
+                    <input type="text" name="title" required placeholder="e.g. Taxi to JFK" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Category</label>
+                        <select name="category" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Travel & Lodging</option>
+                            <option>Meals & Entertainment</option>
+                            <option>Software & Tools</option>
+                            <option>Office Supplies</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Claim Value ($)</label>
+                        <input type="number" step="0.01" name="amount" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Transaction Date</label>
+                    <input type="date" name="date" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Approval status</label>
+                    <select name="status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        <option>Reviewing</option>
+                        <option>Approved</option>
+                        <option>Rejected</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Register Claim</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT EXPENSE -->
+    <div id="expense-edit-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+        <div class="bg-surface max-w-md w-full p-lg rounded-xl border border-outline-variant shadow-2xl flex flex-col gap-md">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg">Modify Expense Details</h3>
+                <button class="material-symbols-outlined hover:text-error" onclick="closeModal('expense-edit-modal')">close</button>
+            </div>
+            <form id="expense-edit-form" method="POST" class="space-y-md">
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Expense Title</label>
+                    <input type="text" name="title" id="edit-exp-title" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div class="grid grid-cols-2 gap-sm">
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Category</label>
+                        <select name="category" id="edit-exp-category" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                            <option>Travel & Lodging</option>
+                            <option>Meals & Entertainment</option>
+                            <option>Software & Tools</option>
+                            <option>Office Supplies</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1">Claim Value ($)</label>
+                        <input type="number" step="0.01" name="amount" id="edit-exp-amount" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Transaction Date</label>
+                    <input type="date" name="date" id="edit-exp-date" required class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none" />
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Approval status</label>
+                    <select name="status" id="edit-exp-status" class="w-full border border-outline-variant p-sm rounded-lg text-body-md outline-none bg-white">
+                        <option>Reviewing</option>
+                        <option>Approved</option>
+                        <option>Rejected</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary text-white py-sm rounded-lg font-bold">Apply Changes</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT CONTROLLERS -->
+    <!-- ========================================== -->
+    <script>
+        // Tab switching logic
+        function switchTab(tabId) {
+            // Hide all tab panes
+            const panes = document.querySelectorAll('.tab-pane');
+            panes.forEach(pane => pane.classList.add('hidden'));
+            
+            // Show active pane
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            // Reset side bar active styles
+            const links = document.querySelectorAll('.sidebar-link');
+            links.forEach(l => {
+                l.classList.remove('bg-primary-container', 'text-on-primary-container');
+                l.classList.add('text-on-surface-variant');
+            });
+
+            // Highlight active side link
+            const activeLink = document.getElementById('link-' + tabId);
+            if (activeLink) {
+                activeLink.classList.add('bg-primary-container', 'text-on-primary-container');
+                activeLink.classList.remove('text-on-surface-variant');
+            }
+
+            // Save tab state in URL search params
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tabId);
+            window.history.pushState({}, '', url);
+        }
+
+        // Modal triggers
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Add auto closing on click background
+        document.querySelectorAll('.fixed.inset-0').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // Setup forms and edit data loaders
+        function openEditEmployeeModal(id, name, role, dept, email, gross, deductions, status) {
+            document.getElementById('edit-emp-name').value = name;
+            document.getElementById('edit-emp-role').value = role;
+            document.getElementById('edit-emp-dept').value = dept;
+            document.getElementById('edit-emp-email').value = email;
+            document.getElementById('edit-emp-gross').value = gross;
+            document.getElementById('edit-emp-deductions').value = deductions;
+            document.getElementById('edit-emp-status').value = status;
+            
+            const form = document.getElementById('employee-edit-form');
+            form.action = '/admin/employee/edit/' + id;
+            openModal('employee-edit-modal');
+        }
+
+        function openEditAttendanceModal(id, dateVal, checkIn, checkOut, status) {
+            document.getElementById('edit-att-date').value = dateVal;
+            document.getElementById('edit-att-in').value = checkIn;
+            document.getElementById('edit-att-out').value = checkOut;
+            document.getElementById('edit-att-status').value = status;
+            
+            const form = document.getElementById('attendance-edit-form');
+            form.action = '/admin/attendance/edit/' + id;
+            openModal('attendance-edit-modal');
+        }
+
+        function openEditInvoiceModal(id, vendor, num, amount, dateVal, dueVal, status, payStatus) {
+            document.getElementById('edit-inv-vendor').value = vendor;
+            document.getElementById('edit-inv-num').value = num;
+            document.getElementById('edit-inv-amount').value = amount;
+            document.getElementById('edit-inv-date').value = dateVal;
+            document.getElementById('edit-inv-due').value = dueVal;
+            document.getElementById('edit-inv-status').value = status;
+            document.getElementById('edit-inv-pay').value = payStatus;
+            
+            const form = document.getElementById('invoice-edit-form');
+            form.action = '/admin/invoice/edit/' + id;
+            openModal('invoice-edit-modal');
+        }
+
+        // Open adjustment salaries modal
+        function openEditPayrollModal(id, gross, deductions, status) {
+            document.getElementById('edit-pay-gross').value = gross;
+            document.getElementById('edit-pay-deductions').value = deductions;
+            document.getElementById('edit-pay-status').value = status;
+            
+            const form = document.getElementById('payroll-edit-form');
+            form.action = '/admin/payroll/edit/' + id;
+            openModal('payroll-edit-modal');
+        }
+
+        function openEditExpenseModal(id, title, category, amount, dateVal, status) {
+            document.getElementById('edit-exp-title').value = title;
+            document.getElementById('edit-exp-category').value = category;
+            document.getElementById('edit-exp-amount').value = amount;
+            document.getElementById('edit-exp-date').value = dateVal;
+            document.getElementById('edit-exp-status').value = status;
+            
+            const form = document.getElementById('expense-edit-form');
+            form.action = '/admin/expense/edit/' + id;
+            openModal('expense-edit-modal');
+        }
+
+        // Generic client-side paginator helper
+        function setupPagination(rowSelector, prevBtnId, nextBtnId, indicatorId, rowsPerPage) {
+            let page = 1;
+            const rows = Array.from(document.querySelectorAll(rowSelector));
+            
+            function update() {
+                const visibleRows = rows.filter(r => !r.classList.contains('hidden-filter'));
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                
+                rows.forEach(r => r.style.display = 'none');
+                visibleRows.forEach((r, idx) => {
+                    if (idx >= start && idx < end) {
+                        r.style.display = '';
+                    }
+                });
+                
+                const totalPages = Math.ceil(visibleRows.length / rowsPerPage) || 1;
+                if (page > totalPages) page = totalPages;
+                
+                const indicator = document.getElementById(indicatorId);
+                if (indicator) {
+                    indicator.textContent = `Page ${page} of ${totalPages}`;
+                }
+                const prevBtn = document.getElementById(prevBtnId);
+                const nextBtn = document.getElementById(nextBtnId);
+                if (prevBtn) prevBtn.disabled = (page === 1);
+                if (nextBtn) nextBtn.disabled = (page === totalPages);
+            }
+            
+            update();
+            
+            return {
+                prev: () => { if (page > 1) { page--; update(); } },
+                next: () => { const visibleRows = rows.filter(r => !r.classList.contains('hidden-filter')); const totalPages = Math.ceil(visibleRows.length / rowsPerPage) || 1; if (page < totalPages) { page++; update(); } },
+                refresh: () => { page = 1; update(); }
+            };
+        }
+
+        let empPag, attPag, leavePag, invPag, payPag, expPag, logsPag;
+        
+        function initPaginators() {
+            empPag = setupPagination('.employee-row', 'prev-emp-page', 'next-emp-page', 'emp-page-indicator', 5);
+            attPag = setupPagination('.admin-att-row', 'prev-att-page', 'next-att-page', 'att-page-indicator', 5);
+            leavePag = setupPagination('.admin-leave-row', 'prev-leave-page', 'next-leave-page', 'leave-page-indicator', 5);
+            invPag = setupPagination('.admin-inv-row', 'prev-inv-page', 'next-inv-page', 'inv-page-indicator', 5);
+            payPag = setupPagination('.admin-pay-row', 'prev-pay-page', 'next-pay-page', 'pay-page-indicator', 5);
+            expPag = setupPagination('.admin-exp-row', 'prev-exp-page', 'next-exp-page', 'exp-page-indicator', 5);
+            logsPag = setupPagination('.log-item-row', 'prev-logs-page', 'next-logs-page', 'logs-page-indicator', 10);
+        }
+
+        window.prevEmpPage = () => empPag.prev();
+        window.nextEmpPage = () => empPag.next();
+        window.prevAttPage = () => attPag.prev();
+        window.nextAttPage = () => attPag.next();
+        window.prevLeavePage = () => leavePag.prev();
+        window.nextLeavePage = () => leavePag.next();
+        window.prevInvPage = () => invPag.prev();
+        window.nextInvPage = () => invPag.next();
+        window.prevPayPage = () => payPag.prev();
+        window.nextPayPage = () => payPag.next();
+        window.prevExpPage = () => expPag.prev();
+        window.nextExpPage = () => expPag.next();
+        window.prevLogsPage = () => logsPag.prev();
+        window.nextLogsPage = () => logsPag.next();
+
+        // System Log Filter Search
+        function filterLogs() {
+            const val = document.getElementById('log-search').value.toLowerCase();
+            const rows = document.querySelectorAll('.log-item-row');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(val)) {
+                    row.classList.remove('hidden-filter');
+                } else {
+                    row.classList.add('hidden-filter');
+                }
+            });
+            logsPag.refresh();
+        }
+
+        // Employee Client-Side Filter/Search
+        function filterEmployees() {
+            const searchVal = document.getElementById('employee-search').value.toLowerCase();
+            const deptVal = document.getElementById('employee-dept-filter').value;
+            const rows = document.querySelectorAll('.employee-row');
+            
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name');
+                const email = row.getAttribute('data-email');
+                const dept = row.getAttribute('data-dept');
+                
+                const matchesSearch = name.includes(searchVal) || email.includes(searchVal);
+                const matchesDept = !deptVal || dept === deptVal;
+                
+                if (matchesSearch && matchesDept) {
+                    row.classList.remove('hidden-filter');
+                } else {
+                    row.classList.add('hidden-filter');
+                }
+            });
+            if (empPag) empPag.refresh();
+        }
+
+        // Global search input integration
+        window.triggerClientSearch = (query) => {
+            // Find which tab is active
+            const activeTab = document.querySelector('.tab-content:not(.hidden)');
+            if (!activeTab) return;
+            const tabId = activeTab.id;
+
+            if (tabId === 'tab-employees') {
+                const searchInput = document.getElementById('employee-search');
+                if (searchInput) {
+                    searchInput.value = query;
+                    filterEmployees();
+                }
+            } else if (tabId === 'tab-logs') {
+                const searchInput = document.getElementById('log-search');
+                if (searchInput) {
+                    searchInput.value = query;
+                    filterLogs();
+                }
+            } else {
+                // Generic row search inside active tab
+                const rows = activeTab.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    if (row.textContent.toLowerCase().includes(query)) {
+                        row.classList.remove('hidden-filter');
+                        row.style.display = '';
+                    } else {
+                        row.classList.add('hidden-filter');
+                        row.style.display = 'none';
+                    }
+                });
+            }
+        };
+
+        // Initialize state on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const activeTab = new URLSearchParams(window.location.search).get('tab') || 'dashboard';
+            switchTab(activeTab);
+            initPaginators();
+        });
+    </script>
+    <!-- Include Global Launcher Components (Apps, Notifications, Profile Redirects, Sidebars) -->
+    <script src="/static/js/global_components.js"></script>
+</body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BPA Suite - Payroll Automation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid #DDE1E6;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #DDE1E6;
+            border-radius: 10px;
+        }
+
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#191c1f",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#0f62fe",
+                        "on-surface": "#191c1f",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f2f4f8",
+                        "on-error-container": "#93000a",
+                        "secondary": "#585f66",
+                        "outline": "#737687",
+                        "tertiary-fixed-dim": "#b8c4ff",
+                        "on-surface-variant": "#424656",
+                        "on-primary-fixed-variant": "#003da9",
+                        "primary": "#004ccd",
+                        "on-secondary-fixed": "#151c22",
+                        "on-primary-container": "#f3f3ff",
+                        "tertiary": "#304db9",
+                        "surface-container-high": "#e6e8ec",
+                        "surface-container": "#eceef2",
+                        "primary-fixed": "#dbe1ff",
+                        "background": "#f7f9fd",
+                        "on-secondary-fixed-variant": "#41484e",
+                        "surface-bright": "#f7f9fd",
+                        "surface-container-highest": "#e0e2e6",
+                        "on-secondary-container": "#5e656c",
+                        "surface-dim": "#d8dade",
+                        "on-tertiary-container": "#f3f3ff",
+                        "surface-variant": "#e0e2e6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "tertiary-container": "#4b67d3",
+                        "tertiary-fixed": "#dde1ff",
+                        "outline-variant": "#c3c6d8",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#0052dd",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c0c7cf",
+                        "inverse-on-surface": "#eff1f5",
+                        "inverse-primary": "#b4c5ff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#00174c",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#1a3ca8",
+                        "secondary-container": "#dce3eb",
+                        "inverse-surface": "#2d3134",
+                        "surface": "#f7f9fd",
+                        "on-tertiary-fixed": "#001453",
+                        "secondary-fixed": "#dce3eb",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "base": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "2xl": "48px",
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "code-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col p-md z-50">
+<div class="mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">BPA Suite</h1>
+<p class="text-on-surface-variant text-label-md">Invisible Optimizer</p>
+</div>
+<nav class="flex-1 space-y-base">
+<!-- Navigation Items with style_active_navigation and style_inactive_navigation -->
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors" href="/attendance">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md">Attendance</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors" href="/leave">
+<span class="material-symbols-outlined">event_busy</span>
+<span class="font-body-md">Leave</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors" href="/invoices">
+<span class="material-symbols-outlined">description</span>
+<span class="font-body-md">Invoices</span>
+</a>
+<!-- Payroll is ACTIVE -->
+<a class="flex items-center gap-md bg-primary-container text-on-primary-container rounded-xl px-md py-sm" href="/payroll">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Payroll</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors" href="/expenses">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body-md">Expenses</span>
+</a>
+{% if current_user and current_user.role == 'Admin' %}
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors text-primary font-bold" href="/admin">
+<span class="material-symbols-outlined text-primary">shield</span>
+<span class="font-body-md">Admin Panel</span>
+</a>
+{% endif %}
+</nav>
+<button class="mt-lg mb-xl bg-primary text-on-primary py-sm px-md rounded-lg flex items-center justify-center gap-sm font-label-md hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Workflow
+        </button>
+<div class="space-y-base border-t border-outline-variant pt-md">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors" href="/settings">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-low transition-colors" href="/support">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Support</span>
+</a>
+<a class="flex items-center gap-md text-red-600 px-md py-sm hover:bg-red-50 transition-colors font-bold" href="/logout">
+<span class="material-symbols-outlined text-red-600">logout</span>
+<span class="font-body-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar (Authority: JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-256px)] h-16 bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-md flex-1">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-xl pr-md py-xs text-body-md focus:ring-2 focus:ring-primary-container transition-all" placeholder="Search employees or reports..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<span class="font-headline-sm text-headline-sm font-bold text-primary pr-xl border-r border-outline-variant">Operations Dashboard</span>
+<div class="flex items-center gap-md">
+<button class="relative p-xs hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-xs hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="flex items-center gap-sm">
+<span class="text-sm font-semibold text-on-surface">{{ current_user.name if current_user else 'User' }}</span>
+<div class="w-8 h-8 rounded-full bg-primary-container overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" src="{{ current_user.avatar_url if current_user and current_user.avatar_url else 'https://lh3.googleusercontent.com/aida-public/AB6AXuDCpHwGgsbtNeP2K11cc8PQ4UOQpk9YGhNnj3us_z7wZZJ1ZIUe6iGAbyXibMZ9Sz_p8yZbUOPf27lV4Yk_O5GjfkPxqae66G0oHXHJCDf-j-xq1_St6isLCvPtUV77eiGsx33YaTyQFPU8-HOfzsE57LnDJtC4WnBPTV-FKpI99_qqQTRxyVE6L_ku8wTTPRNKAq1QVDoJ2kAptw9_poWpmlrDAH1sKpNN4oitnq_xQ7QC1OxMY3YksQ' }}"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-margin-desktop h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar">
+<div class="max-w-7xl mx-auto space-y-lg">
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Payroll Summary</h2>
+<p class="text-on-surface-variant">Reviewing Cycle: Oct 01 - Oct 31, 2023</p>
+</div>
+<div class="flex gap-md">
+<a href="/api/export/employees" class="flex items-center gap-sm px-md py-sm border border-outline rounded-lg text-on-surface hover:bg-surface-container-low transition-colors font-label-md inline-flex">
+                        <span class="material-symbols-outlined text-[20px]">file_download</span>
+                        Export Report
+                    </a>
+<button id="run-payroll-btn" class="bg-primary-container text-on-primary-container flex items-center gap-sm px-lg py-sm rounded-lg font-headline-sm hover:opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                        Run Payroll
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Summary -->
+<div class="grid grid-cols-12 gap-lg h-full">
+<!-- Next Pay Cycle Countdown (High Trust/Visibility) -->
+<div class="col-span-4 glass-panel rounded-xl p-lg flex flex-col justify-between border-l-4 border-l-primary shadow-sm relative overflow-hidden">
+<div class="relative z-10">
+<span class="text-label-md text-primary font-bold uppercase tracking-widest">Next Disbursement</span>
+<div class="mt-md flex items-baseline gap-xs">
+<span class="text-[52px] font-extrabold leading-tight tracking-tighter" id="countdown-days">04</span>
+<span class="text-headline-sm font-semibold text-on-surface-variant">Days</span>
+</div>
+<p class="text-body-md text-on-surface-variant mt-xs">Automatic trigger set for Nov 01, 08:00 AM</p>
+</div>
+<div class="mt-lg flex items-center gap-md z-10">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a female financial controller with a friendly expression, soft studio lighting, professional corporate photography style, high-end business aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqG98ShbR2TSX0GWGWv5rsNxWG6Mxd2FcMYbkrKGbJW1jsD0h8NNuDuSY7ORumbvKWPOCsFShilxMOoFCMasIvqwIruqB152wDlFfrtJgToMtKsx9wZnalaDItq2HbtFPVT5O6iJ2oxUYdXXTlqs4x7RIGf1LB-vKwJ31JyowSrxX5gz6xW0jyWa4_nZQq0zaLgdmWSPAa-ujAywAginUfV9QhhaDqqnuZje74TEgW1Nwl8vgVf50QIw"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a male compliance officer in a modern workspace, clean lines, professional business lighting, high resolution, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4xZO2d-oDeXF1EBFACtx1ZSMhoBzzh-SekQnpwS9-sVZUgBXsc0k7fFjQQ1DW6o0E2HTj-9gAhHHRR3aF7eErZ7fzcoopKshEqHFVjeAgAydQOf99rHGl_1_tfoSHYDZspjqAOU5uIpIXbgJfaEWqnTu3jDzFg-wyM2Oga0B9kMxf1zI-TXhv68DdP6fVxGsbIkFa681jsWen_ZCrR_08rEQCHh611q9yN3h7Ji2gZCZJvEfHq234NQ"/>
+</div>
+</div>
+<span class="text-label-md text-on-surface-variant">2 Approvals Pending</span>
+</div>
+<div class="absolute -right-8 -bottom-8 opacity-5">
+<span class="material-symbols-outlined text-[160px]">timer</span>
+</div>
+</div>
+<!-- Payroll Summary Chart (Gross vs Net) -->
+<div class="col-span-8 glass-panel rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Financial Overview</h3>
+<div class="flex gap-md">
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-label-md text-on-surface-variant">Gross Pay</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-tertiary-container"></span>
+<span class="text-label-md text-on-surface-variant">Net Pay</span>
+</div>
+</div>
+</div>
+<!-- Chart Placeholder UI -->
+<div class="h-40 flex items-end justify-between gap-sm px-md">
+<!-- Mock bars -->
+<div class="flex-1 flex flex-col gap-1 items-center">
+<div class="w-full flex flex-col justify-end gap-1 h-32">
+<div class="bg-primary w-full h-[80%] rounded-t-sm opacity-90 transition-all hover:opacity-100"></div>
+<div class="bg-tertiary-container w-full h-[60%] rounded-t-sm opacity-90 transition-all hover:opacity-100"></div>
+</div>
+<span class="text-label-md mt-sm text-on-surface-variant">Jul</span>
+</div>
+<div class="flex-1 flex flex-col gap-1 items-center">
+<div class="w-full flex flex-col justify-end gap-1 h-32">
+<div class="bg-primary w-full h-[85%] rounded-t-sm opacity-90"></div>
+<div class="bg-tertiary-container w-full h-[65%] rounded-t-sm opacity-90"></div>
+</div>
+<span class="text-label-md mt-sm text-on-surface-variant">Aug</span>
+</div>
+<div class="flex-1 flex flex-col gap-1 items-center">
+<div class="w-full flex flex-col justify-end gap-1 h-32">
+<div class="bg-primary w-full h-[78%] rounded-t-sm opacity-90"></div>
+<div class="bg-tertiary-container w-full h-[58%] rounded-t-sm opacity-90"></div>
+</div>
+<span class="text-label-md mt-sm text-on-surface-variant">Sep</span>
+</div>
+<div class="flex-1 flex flex-col gap-1 items-center">
+<div class="w-full flex flex-col justify-end gap-1 h-32 relative">
+<div class="bg-primary w-full h-[92%] rounded-t-sm"></div>
+<div class="bg-tertiary-container w-full h-[72%] rounded-t-sm"></div>
+<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 bg-inverse-surface text-inverse-on-surface text-[10px] px-2 py-1 rounded">
+                                    $245,200.00
+                                </div>
+</div>
+<span class="text-label-md mt-sm text-primary font-bold">Current</span>
+</div>
+</div>
+</div>
+<!-- Employee Payslips Processing List -->
+<div class="col-span-12 glass-panel rounded-xl overflow-hidden shadow-sm">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+<div class="flex items-center gap-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Employee Payslips</h3>
+<span class="bg-secondary-container text-on-secondary-container px-sm py-[2px] rounded-full text-label-md">148 Total</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm border border-outline-variant rounded-lg text-label-md text-on-surface-variant overflow-hidden bg-surface-container-low px-2">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+<select id="department-filter" onchange="filterPayrollByDepartment(this.value)" class="bg-transparent border-none py-1 focus:ring-0 text-xs font-semibold text-slate-700 cursor-pointer">
+  <option value="All">All Departments</option>
+  <option value="IT">IT</option>
+  <option value="HR">HR</option>
+  <option value="Engineering">Engineering</option>
+  <option value="Product">Product</option>
+  <option value="Marketing">Marketing</option>
+  <option value="Sales">Sales</option>
+</select>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-label-md text-on-surface-variant uppercase tracking-wider">
+<tr>
+<th class="px-lg py-sm font-medium">Employee</th>
+<th class="px-lg py-sm font-medium text-right">Gross Pay</th>
+<th class="px-lg py-sm font-medium text-right">Deductions</th>
+<th class="px-lg py-sm font-medium text-right">Net Pay</th>
+<th class="px-lg py-sm font-medium">Status</th>
+<th class="px-lg py-sm font-medium text-center">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant bg-surface-container-lowest">
+{% for emp in employees %}
+<tr class="hover:bg-surface-container-low transition-colors {% if loop.index0 % 2 == 1 %}bg-surface-container-low/30{% endif %} group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-secondary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="{{ emp.name }}'s avatar" src="{{ emp.avatar_url }}"/>
+</div>
+<div>
+<div class="font-body-md text-on-surface font-semibold">{{ emp.name }}</div>
+<div class="text-label-md text-on-surface-variant">{{ emp.department }} • {{ emp.role }}</div>
+</div>
+</div>
+</td>
+<td class="px-lg py-md text-right font-code-sm">${{ "{:,.2f}".format(emp.gross_pay) }}</td>
+<td class="px-lg py-md text-right text-error font-code-sm">-${{ "{:,.2f}".format(emp.deductions) }}</td>
+<td class="px-lg py-md text-right font-bold font-code-sm">${{ "{:,.2f}".format(emp.net_pay) }}</td>
+<td class="px-lg py-md" onclick="event.stopPropagation()">
+  <select onchange="updateEmployeeStatus({{ emp.id }}, this.value)" class="text-xs font-semibold rounded-xl px-2 py-1 bg-surface-container-low border border-outline-variant focus:ring-1 focus:ring-primary text-slate-700">
+    <option value="Ready" {% if emp.status == 'Ready' %}selected{% endif %}>Ready</option>
+    <option value="On Hold" {% if emp.status == 'On Hold' %}selected{% endif %}>On Hold</option>
+    <option value="Review Required" {% if emp.status == 'Review Required' %}selected{% endif %}>Review Required</option>
+    <option value="Paid" {% if emp.status == 'Paid' %}selected{% endif %}>Paid</option>
+  </select>
+</td>
+<td class="px-lg py-md text-center">
+<a href="/payroll/payslip/{{ emp.id }}" target="_blank" class="p-xs text-on-surface-variant hover:text-primary transition-colors inline-block">
+<span class="material-symbols-outlined">visibility</span>
+</a>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<div class="px-lg py-sm bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-md text-on-surface-variant">Showing 1-4 of 148 entries</span>
+<div class="flex gap-sm">
+<button class="p-xs border border-outline-variant rounded hover:bg-surface-container transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-xs border border-outline-variant rounded hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for quick actions -->
+<div class="fixed bottom-lg right-lg group">
+<button class="w-14 h-14 bg-primary-container text-on-primary-container rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+<div class="absolute bottom-full right-0 mb-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex flex-col items-end gap-sm">
+<div class="bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-lg text-label-md shadow-lg flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                Automation Logs
+            </div>
+<div class="bg-inverse-surface text-inverse-on-surface px-md py-sm rounded-lg text-label-md shadow-lg flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]">shield</span>
+                Security Protocol
+            </div>
+</div>
+</div>
+<!-- Micro-interaction script -->
+    <script>
+        function updateEmployeeStatus(empId, status) {
+            fetch(`/api/employee/update-status/${empId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: status })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Error updating status: ' + data.error);
+                }
+            })
+            .catch(err => {
+                console.error("Error updating status:", err);
+            });
+        }
+
+        // Combined Search & Filter State
+        let currentDeptFilter = 'All';
+        let currentSearchQuery = '';
+        let currentRows = Array.from(document.querySelectorAll('tbody tr'));
+        let currentPage = 1;
+        const rowsPerPage = 5;
+
+        function filterAndSearchPayroll() {
+            const allRows = Array.from(document.querySelectorAll('tbody tr'));
+
+            currentRows = allRows.filter(row => {
+                // Filter by Department
+                let deptMatch = true;
+                if (currentDeptFilter !== 'All') {
+                    const deptText = row.querySelector('td:first-child .text-label-md').textContent.trim();
+                    deptMatch = deptText.startsWith(currentDeptFilter) || deptText.includes('• ' + currentDeptFilter) || deptText.includes(currentDeptFilter + ' •');
+                    // Wait, department and role are displayed as: "Engineering • Employee"
+                    // So we check if the text contains currentDeptFilter.
+                    deptMatch = deptText.toLowerCase().includes(currentDeptFilter.toLowerCase());
+                }
+
+                // Filter by Search Query
+                let searchMatch = true;
+                if (currentSearchQuery) {
+                    searchMatch = row.textContent.toLowerCase().includes(currentSearchQuery);
+                }
+
+                return deptMatch && searchMatch;
+            });
+
+            // Update Total Count label
+            const countLabel = document.querySelector('.bg-secondary-container.text-on-secondary-container');
+            if (countLabel) {
+                countLabel.textContent = `${currentRows.length} Matches`;
+            }
+
+            // Update showing entry label
+            const entryLabel = document.querySelector('main table + div span');
+            if (entryLabel) {
+                entryLabel.textContent = `Showing 1-${Math.min(rowsPerPage, currentRows.length)} of ${currentRows.length} entries`;
+            }
+
+            currentPage = 1;
+            showPage(1);
+        }
+
+        function filterPayrollByDepartment(dept) {
+            currentDeptFilter = dept;
+            filterAndSearchPayroll();
+        }
+
+        window.triggerClientSearch = (query) => {
+            currentSearchQuery = query;
+            filterAndSearchPayroll();
+        };
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            const allRows = Array.from(document.querySelectorAll('tbody tr'));
+            allRows.forEach(row => row.style.display = 'none');
+
+            currentRows.forEach((row, index) => {
+                if (index >= start && index < end) {
+                    row.style.display = '';
+                }
+            });
+
+            const totalPages = Math.ceil(currentRows.length / rowsPerPage) || 1;
+            
+            // Check if page controls exist
+            const prevBtn = document.getElementById('prev-page') || document.querySelector('main table + div button:first-of-type');
+            const nextBtn = document.getElementById('next-page') || document.querySelector('main table + div button:last-of-type');
+            const indicator = document.querySelector('main table + div span.text-label-md');
+
+            if (prevBtn) prevBtn.disabled = (page === 1);
+            if (nextBtn) nextBtn.disabled = (page === totalPages);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simple interactive feedback
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+                btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            });
+
+            // Countdown simulation
+            let days = 4;
+            const updateTimer = () => {
+                const el = document.getElementById('countdown-days');
+                if (el) el.textContent = days.toString().padStart(2, '0');
+            };
+            
+            // Randomize bar heights slightly for visual interest on hover
+            const bars = document.querySelectorAll('.bg-primary, .bg-tertiary-container');
+            bars.forEach(bar => {
+                bar.addEventListener('mouseenter', () => {
+                    bar.style.filter = 'brightness(1.1)';
+                });
+                bar.style.transition = 'filter 0.2s';
+                bar.addEventListener('mouseleave', () => {
+                    bar.style.filter = 'none';
+                });
+            });
+
+            // Run payroll integration
+            const runBtn = document.getElementById('run-payroll-btn');
+            if (runBtn) {
+                runBtn.addEventListener('click', () => {
+                    runBtn.disabled = true;
+                    runBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">sync</span> Running Payroll...';
+                    
+                    fetch('/api/run-payroll', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            runBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check_circle</span> Payroll Disbursed';
+                            runBtn.className = "bg-secondary text-white flex items-center gap-sm px-lg py-sm rounded-lg font-headline-sm shadow-sm";
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error running payroll:", err);
+                        runBtn.disabled = false;
+                        runBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">play_circle</span> Run Payroll';
+                    });
+                });
+            }
+
+            // Hook up next/prev page buttons
+            const prevBtn = document.querySelector('main table + div button:first-of-type');
+            const nextBtn = document.querySelector('main table + div button:last-of-type');
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        showPage(currentPage);
+                    }
+                });
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    const totalPages = Math.ceil(currentRows.length / rowsPerPage) || 1;
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        showPage(currentPage);
+                    }
+                });
+            }
+
+            // Initial view
+            filterAndSearchPayroll();
+        });
+    </script>
+    <!-- Include Global Launcher Components (Apps, Notifications, Profile Redirects, Sidebars) -->
+    <script src="/static/js/global_components.js"></script>
+</body>
+</html>

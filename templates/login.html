@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Portal Login - BPA Suite</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#004ccd',
+                        background: '#f7f9fd',
+                        'outline-variant': '#dde1e6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f7f9fd;
+            color: #191c1f;
+        }
+        .bento-card {
+            background: #ffffff;
+            border: 1px solid #dde1e6;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease-in-out;
+        }
+        .bento-card:hover {
+            box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 relative">
+    
+    <!-- Background Design Details -->
+    <div class="absolute w-[450px] h-[450px] bg-blue-100/40 rounded-full blur-[100px] -top-20 -left-20 pointer-events-none"></div>
+    <div class="absolute w-[500px] h-[500px] bg-indigo-100/30 rounded-full blur-[100px] -bottom-20 -right-20 pointer-events-none"></div>
+    
+    <div class="max-w-4xl w-full flex flex-col md:flex-row gap-8 items-stretch justify-center relative z-10">
+        
+        <!-- Left Side: Login Form Card -->
+        <div class="max-w-md w-full bg-white border border-outline-variant p-8 md:p-10 rounded-2xl flex flex-col gap-6 shadow-sm">
+            
+            <div class="text-center space-y-2">
+                <div class="inline-flex p-3 bg-blue-50 text-primary border border-blue-100 rounded-xl mb-1 shadow-sm">
+                    <span class="material-symbols-outlined text-[32px]">shield_person</span>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">BPA Suite</h1>
+                <p class="text-sm text-slate-500 font-medium">Enterprise Workflow Portal Access</p>
+            </div>
+
+            <!-- FLASH NOTIFICATIONS -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="space-y-2">
+                  {% for category, msg in messages %}
+                    <div class="px-4 py-2.5 rounded-xl text-xs font-semibold border flex justify-between items-center transition-all
+                      {% if category == 'danger' or category == 'error' %}
+                        bg-red-50 text-red-700 border-red-100
+                      {% elif category == 'warning' %}
+                        bg-amber-50 text-amber-700 border-amber-100
+                      {% else %}
+                        bg-emerald-50 text-emerald-700 border-emerald-100
+                      {% endif %}">
+                      <span>{{ msg }}</span>
+                      <button onclick="this.parentElement.remove()" class="material-symbols-outlined text-[16px] opacity-70 hover:opacity-100">close</button>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            <!-- FORM -->
+            <form action="/login" method="POST" class="space-y-5">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Corporate Email</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">mail</span>
+                        <input type="email" name="email" id="form-email" required placeholder="name@company.com" 
+                            class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-primary focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-400" />
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Password</label>
+                        <a href="/forgot-password" class="text-xs font-semibold text-primary hover:underline transition-colors">Forgot Password?</a>
+                    </div>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">lock</span>
+                        <input type="password" name="password" id="form-password" required placeholder="••••••••••••" 
+                            class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-primary focus:ring-4 focus:ring-blue-100 transition-all placeholder:text-slate-400" />
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" name="remember" id="remember" class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary/20" />
+                    <label for="remember" class="text-xs font-medium text-slate-500 cursor-pointer hover:text-slate-700 transition-colors">Keep me signed in</label>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-xl font-bold hover:opacity-95 transition-all shadow-md shadow-blue-500/10 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">login</span> Access Workspace
+                </button>
+            </form>
+
+            <div class="text-center text-xs text-slate-500 border-t border-slate-100 pt-5">
+                New to BPA Suite? <a href="/register" class="font-semibold text-primary hover:underline transition-colors">Register Account &rarr;</a>
+            </div>
+
+        </div>
+
+        <!-- Right Side: Demo Credentials Helper Card -->
+        <div class="max-w-sm w-full bg-white border border-outline-variant p-8 rounded-2xl flex flex-col gap-5 justify-between shadow-sm">
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-1">
+                    <span class="material-symbols-outlined text-primary">info</span>
+                    Test Accounts
+                </h3>
+                <p class="text-xs text-slate-500">Click any credential block below to auto-fill the login form instantly:</p>
+            </div>
+            
+            <div class="space-y-3 my-1">
+                <!-- Admin -->
+                <div class="p-3.5 bg-slate-50 border border-slate-150 rounded-xl flex flex-col gap-1 cursor-pointer hover:bg-slate-100/70 hover:border-primary transition-all group" onclick="fillCreds('admin@bpasuite.com')">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-primary uppercase tracking-widest">Administrator</span>
+                        <span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary transition-colors">content_copy</span>
+                    </div>
+                    <p class="text-xs text-slate-800 font-semibold font-mono">admin@bpasuite.com</p>
+                    <p class="text-[10px] text-slate-400 font-mono">Password: password123</p>
+                </div>
+                <!-- HR -->
+                <div class="p-3.5 bg-slate-50 border border-slate-150 rounded-xl flex flex-col gap-1 cursor-pointer hover:bg-slate-100/70 hover:border-primary transition-all group" onclick="fillCreds('hr@bpasuite.com')">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">HR Specialist</span>
+                        <span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-indigo-600 transition-colors">content_copy</span>
+                    </div>
+                    <p class="text-xs text-slate-800 font-semibold font-mono">hr@bpasuite.com</p>
+                    <p class="text-[10px] text-slate-400 font-mono">Password: password123</p>
+                </div>
+                <!-- Manager -->
+                <div class="p-3.5 bg-slate-50 border border-slate-150 rounded-xl flex flex-col gap-1 cursor-pointer hover:bg-slate-100/70 hover:border-primary transition-all group" onclick="fillCreds('manager@bpasuite.com')">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-purple-600 uppercase tracking-widest">Team Manager</span>
+                        <span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-purple-600 transition-colors">content_copy</span>
+                    </div>
+                    <p class="text-xs text-slate-800 font-semibold font-mono">manager@bpasuite.com</p>
+                    <p class="text-[10px] text-slate-400 font-mono">Password: password123</p>
+                </div>
+                <!-- Employee -->
+                <div class="p-3.5 bg-slate-50 border border-slate-150 rounded-xl flex flex-col gap-1 cursor-pointer hover:bg-slate-100/70 hover:border-primary transition-all group" onclick="fillCreds('sarah.jenkins@bpasuite.com')">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-bold text-teal-600 uppercase tracking-widest">Employee</span>
+                        <span class="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-teal-600 transition-colors">content_copy</span>
+                    </div>
+                    <p class="text-xs text-slate-800 font-semibold font-mono">sarah.jenkins@bpasuite.com</p>
+                    <p class="text-[10px] text-slate-400 font-mono">Password: password123</p>
+                </div>
+            </div>
+            
+            <div class="text-[10px] text-slate-400 text-center leading-normal">
+                Credentials are loaded dynamically from pre-seeded SQlite demo tables.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function fillCreds(email) {
+            document.getElementById('form-email').value = email;
+            document.getElementById('form-password').value = 'password123';
+            
+            // Add subtle click trigger flash animation
+            const form = document.querySelector('form');
+            form.classList.add('ring-2', 'ring-primary/20', 'rounded-2xl', 'p-2');
+            setTimeout(() => {
+                form.classList.remove('ring-2', 'ring-primary/20', 'rounded-2xl', 'p-2');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
