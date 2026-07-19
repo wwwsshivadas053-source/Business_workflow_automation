@@ -27,6 +27,16 @@ db = SQLAlchemy(app)
 app.jinja_env.globals.update(min=min, max=max)
 
 # ----------------------------------------------------
+# Initialize database on first request (covers production deployments where __main__ is not executed)
+# ----------------------------------------------------
+@app.before_first_request
+def initialize_database():
+    # Create tables if they don't exist
+    db.create_all()
+    # Seed with default data only if empty
+    seed_database()
+
+# ----------------------------------------------------
 # Models
 # ----------------------------------------------------
 
