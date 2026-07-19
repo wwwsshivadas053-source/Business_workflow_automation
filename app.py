@@ -26,15 +26,6 @@ db = SQLAlchemy(app)
 
 app.jinja_env.globals.update(min=min, max=max)
 
-# ----------------------------------------------------
-# Initialize database on first request (covers production deployments where __main__ is not executed)
-# ----------------------------------------------------
-@app.before_first_request
-def initialize_database():
-    # Create tables if they don't exist
-    db.create_all()
-    # Seed with default data only if empty
-    seed_database()
 
 # ----------------------------------------------------
 # Models
@@ -1253,6 +1244,8 @@ def view_doc(doc_id):
     if not doc:
         flash("Document not found.", "warning")
         return redirect(url_for('support'))
+        
+    return render_template('doc_viewer.html', doc=doc, doc_id=doc_id, page="support")
 
 # ----------------------------------------------------
 # Error Handlers
@@ -1264,17 +1257,17 @@ def internal_error(error):
     log_activity(f"Internal server error: {error}", "System", None)
     # Render a user-friendly error page
     return render_template('500.html'), 500
-        
-    return render_template('doc_viewer.html', doc=doc, doc_id=doc_id, page="support")
 
 # ----------------------------------------------------
 # Main Application Startup
 # ----------------------------------------------------
 
+# Initialize database tables and seed data at module level (runs during WSGI startup on Render)
+with app.app_context():
+    db.create_all()
+    seed_database()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        seed_database()
     # Use the PORT environment variable provided by Render (default to 5000 for local development)
     port = int(os.getenv('PORT', 5000))
     # Disable debug mode in production; can be overridden by DEBUG env variable
