@@ -267,6 +267,6 @@ Full Stack Developer
 
 Machine Learning Engineer
 
-LinkedIn: https://linkedin.com/in/yourprofile
+LinkedIn: https://linkedin.com/in/prajwal-t-s-354a57359
 
 GitHub: https://github.com/wwwsshivadas053-source
